@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/!/Art/UI/Stylesheet.uss?fileID=7433441132597879392&amp;guid=3311aff2f999a954b821d4f67f48bb0d&amp;type=3#Stylesheet" />
+    <ui:VisualElement name="StartGameMenuCanvas" style="height: 100%; width: 100%; justify-content: flex-start; align-items: center; display: flex; visibility: visible;">
+        <ui:GroupBox style="top: 72%; width: 100%; justify-content: flex-start; align-items: center;">
+            <ui:Label text="HOLD TO MOVE" display-tooltip-when-elided="true" enable-rich-text="false" style="justify-content: flex-start; align-items: stretch; white-space: nowrap; -unity-text-align: upper-center; font-size: 60px; -unity-font: resource(&apos;Fonts/Insanibu&apos;); -unity-font-definition: initial; -unity-text-outline-color: rgb(0, 0, 0); color: rgb(255, 255, 255); -unity-text-outline-width: 2px; opacity: 1; -unity-font-style: normal; text-shadow: 0 0 10px rgb(0, 0, 0);" />
+            <ui:Image name="SwipeSlider" style="--unity-image: url(&apos;&apos;); background-color: rgba(255, 255, 255, 0.26); -unity-background-image-tint-color: rgb(255, 255, 255); height: 12px; width: 380px; translate: 0 0;" />
+            <ui:Image name="HandSprite" class="hand" />
+        </ui:GroupBox>
+        <ui:Button display-tooltip-when-elided="true" name="StartGameButton" style="position: absolute; height: 100%; width: 100%; background-color: rgba(88, 88, 88, 0);" />
+    </ui:VisualElement>
+</ui:UXML>
