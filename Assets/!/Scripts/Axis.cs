@@ -1,4 +1,7 @@
-public enum Axis
+namespace AxisNS
 {
-    X, Y, Z
+    public enum Axis
+    {
+        X, Y, Z
+    }
 }

@@ -1,10 +1,12 @@
 using DG.Tweening;
 using GameplayNS.CubeTowerNS;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityMethodsNS;
 
 namespace GameplayNS
 {
-    public class GameStatusManager : MonoBehaviour
+    public class GameStatusManager : OnEnableMethodAfterStart
     {
         [SerializeField]
         private GameObject stickmanMainBody;
@@ -16,28 +18,40 @@ namespace GameplayNS
         float stickmanImpulseForce;
         [SerializeField]
         private PlayerController playerController;
+        [SerializeField]
+        private int currentScore = 0;
 
-        private void OnEnable()
+        public int CurrentScore { get => currentScore; }
+
+        protected override void OnEnableAfterStart()
         {
             CubeTower.Instance.OnCubeRemove += EndGame;
+            CubeTower.Instance.OnCubeAdd += CountScore;
         }
         private void OnDisable()
         {
             CubeTower.Instance.OnCubeRemove -= EndGame;
+            CubeTower.Instance.OnCubeAdd -= CountScore;
         }
         public void StartGame()
         {
             playerController.enabled = true;
         }
-        private void EndGame()
+        public void ResetGame()
         {
-            if (CubeTower.Instance.AmountOfActiveCubes <= 0)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        public void EndGame()
+        {
+            if (CubeTower.Instance.CheckIfGameLost())
             {
                 playerController.enabled = false;
                 CubeTowerGameEnd();
                 StickmanGameEnd();
             }
         }
+        private void CountScore() =>
+            currentScore++;
         private void CubeTowerGameEnd()
         {
             CubeTower.Instance.StopAllCoroutines();

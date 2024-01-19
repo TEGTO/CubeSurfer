@@ -1,8 +1,10 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityMethodsNS;
+
 namespace GameplayNS.CubeTowerNS
 {
-    public class StickmanControlling : MonoBehaviour
+    public class StickmanControlling : OnEnableMethodAfterStart
     {
         public const string STICKMAN_JUMPING_ANIMATION = "Jumping";
 
@@ -13,9 +15,11 @@ namespace GameplayNS.CubeTowerNS
         [SerializeField]
         private Rigidbody stickmanRigidbody;
         [SerializeField]
+        private float heightOffest = 0.1f;
+        [SerializeField]
         private float jumpDuration = 0.5f;
 
-        private void OnEnable()
+        protected override void OnEnableAfterStart()
         {
             CubeTower.Instance.OnCubeAdd += MoveUp;
             CubeTower.Instance.OnCubeRemove += MoveDown;
@@ -34,7 +38,7 @@ namespace GameplayNS.CubeTowerNS
         }
         private void MoveTransformUp()
         {
-            float newStickmanYPosition = CubeTower.Instance.CubeHeight * CubeTower.Instance.AmountOfActiveCubes;
+            float newStickmanYPosition = CubeTower.Instance.CubeHeight * CubeTower.Instance.AmountOfCubesInTower + heightOffest;
             stickman.transform.DOMoveY(newStickmanYPosition, jumpDuration);
         }
         private void MoveDown()

@@ -1,3 +1,4 @@
+using AxisNS;
 using DG.Tweening;
 using UnityEngine;
 namespace CameraNS

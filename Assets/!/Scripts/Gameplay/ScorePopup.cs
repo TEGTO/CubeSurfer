@@ -36,7 +36,7 @@ namespace GameplayNS.CubeTowerNS
         {
             for (int i = 0; i < poolingAmount; i++)
             {
-                GameObject popup = Instantiate(scorePrefab, transform.position, Quaternion.identity, null);
+                GameObject popup = Instantiate(scorePrefab, transform.position, Quaternion.identity, transform);
                 popup.SetActive(false);
                 scorePopupsPooling.Add(popup);
             }

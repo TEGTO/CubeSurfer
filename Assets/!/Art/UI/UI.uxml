@@ -8,4 +8,19 @@
         </ui:GroupBox>
         <ui:Button display-tooltip-when-elided="true" name="StartGameButton" style="position: absolute; height: 100%; width: 100%; background-color: rgba(88, 88, 88, 0);" />
     </ui:VisualElement>
+    <ui:VisualElement name="LostMenuCanvas" style="position: absolute; width: 100%; height: 100%; visibility: hidden;">
+        <ui:Image name="LostOverlay" class="overlay overlay-hidden" />
+        <ui:GroupBox style="justify-content: flex-start; align-items: center; flex-shrink: 0; flex-grow: 1;">
+            <ui:Label text="FAIL!" display-tooltip-when-elided="true" class="text" style="margin-top: 10%; font-size: 75px;" />
+            <ui:Label text="YOUR SCORE: 500" display-tooltip-when-elided="true" name="ScoreOnLostScreen" class="text" style="margin-top: 10%; font-size: 50px; white-space: normal;" />
+            <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" text="TRY AGAIN" name="TryAgainButton" class="text button">
+                <ui:Image name="ButtonInnerBorder" style="width: 200%; height: 100%; top: 115%; background-color: rgb(233, 96, 0); right: -50%; position: absolute;" />
+            </ui:Button>
+        </ui:GroupBox>
+    </ui:VisualElement>
+    <ui:VisualElement name="ScoreCanvas" style="position: absolute; width: 100%; visibility: hidden;">
+        <ui:GroupBox style="flex-direction: row; width: 100%; justify-content: center; align-items: center;">
+            <ui:Label text="105" display-tooltip-when-elided="true" name="Score" class="text" />
+        </ui:GroupBox>
+    </ui:VisualElement>
 </ui:UXML>

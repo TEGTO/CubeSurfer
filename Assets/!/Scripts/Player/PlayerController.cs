@@ -1,3 +1,4 @@
+using AxisNS;
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 using UtilityNS;
@@ -12,20 +13,27 @@ namespace GameplayNS
     {
         [SerializeField]
         private InputManager inputManager;
-        [SerializeField]
+        [Header("Character"), SerializeField]
         private Axis characterForwardAxis = Axis.X;
         [SerializeField]
-        private Axis playerControlledAxis = Axis.X;
+        private float startChracterMoveSpeed = 5f;
         [SerializeField]
-        private float chracterMoveSpeed = 5f;
+        private float maxChracterMoveSpeed = 15f;
+        [SerializeField]
+        private float timeToGetMaxSpeed = 300f;
+        [Header("Player"), SerializeField]
+        private Axis playerControlledAxis = Axis.X;
         [SerializeField]
         private float playerInputMoveSpeed = 5f;
         [SerializeField]
-        private Vector2 characterHorizontalMaxBoundaries;
+        private Vector2 maxHorizontalBoundaries;
 
+        private float currentTimeFromGameStart;
         private Vector3 playerInputMovement;
         private Vector3 playerInputMovementDirection;
         private Vector3 characterMovementDirection;
+
+        protected float CurrentChracterSpeed { get { return Mathf.Lerp(startChracterMoveSpeed, maxChracterMoveSpeed, currentTimeFromGameStart / timeToGetMaxSpeed); } }
 
         private void OnEnable()
         {
@@ -43,6 +51,7 @@ namespace GameplayNS
         }
         private void Update()
         {
+            currentTimeFromGameStart += Time.deltaTime;
             CombineMoveVectors();
         }
         private void PlayerMoveInput(TouchControl touch)
@@ -59,7 +68,7 @@ namespace GameplayNS
         }
         private void CombineMoveVectors()
         {
-            Vector3 characterMovement = characterMovementDirection * chracterMoveSpeed;
+            Vector3 characterMovement = characterMovementDirection * CurrentChracterSpeed;
             Vector3 combinedMovement = characterMovement + playerInputMovement;
             transform.Translate(combinedMovement * Time.deltaTime, Space.World);
             transform.position = ClampedPlayerInput(transform.position);
@@ -70,13 +79,13 @@ namespace GameplayNS
             switch (playerControlledAxis)
             {
                 case Axis.X:
-                    positionX = Mathf.Clamp(positionX, characterHorizontalMaxBoundaries.x, characterHorizontalMaxBoundaries.y);
+                    positionX = Mathf.Clamp(positionX, maxHorizontalBoundaries.x, maxHorizontalBoundaries.y);
                     break;
                 case Axis.Y:
-                    positionY = Mathf.Clamp(positionY, characterHorizontalMaxBoundaries.x, characterHorizontalMaxBoundaries.y);
+                    positionY = Mathf.Clamp(positionY, maxHorizontalBoundaries.x, maxHorizontalBoundaries.y);
                     break;
                 case Axis.Z:
-                    positionZ = Mathf.Clamp(positionZ, characterHorizontalMaxBoundaries.x, characterHorizontalMaxBoundaries.y);
+                    positionZ = Mathf.Clamp(positionZ, maxHorizontalBoundaries.x, maxHorizontalBoundaries.y);
                     break;
             }
             Vector3 clampedVector = new Vector3(positionX, positionY, positionZ);
