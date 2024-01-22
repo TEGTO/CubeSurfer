@@ -17,7 +17,7 @@ namespace GameplayNS.CubeTowerNS
             isEnabled = true;
         }
         private bool CheckConditions(Collision collision) =>
-            isEnabled && collision.gameObject.TryGetComponent(out TowerCube towerCube);
+            isEnabled && collision.gameObject.TryGetComponent(out TowerCube towerCube) && towerCube.CubeInTower;
         private void RemoveCube()
         {
             CubeTower.Instance.RemoveCubeFromTower(gameObject);

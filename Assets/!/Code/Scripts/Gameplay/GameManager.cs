@@ -17,7 +17,9 @@ namespace GameplayNS
         [SerializeField]
         private Rigidbody stickmanRagdollMainRigidBody;
         [SerializeField]
-        float stickmanImpulseForce;
+        float stickmanImpulseForceMuliplier;
+        [SerializeField]
+        float stickmanMaxImpulseForce;
         [SerializeField]
         private PlayerController playerController;
 
@@ -76,7 +78,8 @@ namespace GameplayNS
             stickmanMainBody.SetActive(false);
             stickmanRagdoll.SetActive(true);
             stickmanRagdoll.transform.DOMoveY(stickmanMainBody.transform.position.y, 0);
-            stickmanRagdollMainRigidBody.AddForce(stickmanRagdoll.transform.forward * stickmanImpulseForce * playerController.CurrentChracterSpeed, ForceMode.Impulse);
+            float forcePower = Mathf.Clamp(stickmanImpulseForceMuliplier * playerController.CurrentChracterSpeed, stickmanImpulseForceMuliplier, stickmanMaxImpulseForce);
+            stickmanRagdollMainRigidBody.AddForce(stickmanRagdoll.transform.forward * forcePower, ForceMode.Impulse);
         }
     }
 }

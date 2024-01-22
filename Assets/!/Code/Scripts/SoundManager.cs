@@ -11,6 +11,7 @@ namespace SoundNS
         private const string SOUND_NAME_UI_BUTTON_CLICK = "UIButtonClick";
         private const string SOUND_NAME_CUBE_PICK_UP = "CubePickUp";
         private const string SOUND_NAME_COLLISION_WITH_WALL = "CollisionWithWall";
+        private const float CAN_PLAY_AGAIN_AFTER_TIME = 0.2f;
 
         private static SoundManager instance;
         public static SoundManager Instance { get => instance; }
@@ -20,6 +21,8 @@ namespace SoundNS
         {
             public string Name;
             public AudioSource AudioSourceReference;
+            [HideInInspector]
+            public float TimeSinceLastPlay;
         }
 
         [SerializeField]
@@ -81,8 +84,12 @@ namespace SoundNS
         }
         private void PlaySoundOneShot(Sound sound)
         {
-            if (!sound.AudioSourceReference.isPlaying || sound.AudioSourceReference.time >= sound.AudioSourceReference.clip.length / 2f)
+            float currentTime = Time.timeSinceLevelLoad;
+            if (!sound.AudioSourceReference.isPlaying || currentTime - sound.TimeSinceLastPlay > CAN_PLAY_AGAIN_AFTER_TIME)
+            {
                 sound.AudioSourceReference.PlayOneShot(sound.AudioSourceReference.clip);
+                sound.TimeSinceLastPlay = currentTime;
+            }
         }
         private void PlaySoundOneShotMultipleTimes(Sound sound) =>
             sound.AudioSourceReference.PlayOneShot(sound.AudioSourceReference.clip);

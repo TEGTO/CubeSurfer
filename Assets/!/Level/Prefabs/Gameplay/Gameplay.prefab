@@ -84,7 +84,8 @@ MonoBehaviour:
   stickmanMainBody: {fileID: 7581858431515863043}
   stickmanRagdoll: {fileID: 177501890927259425}
   stickmanRagdollMainRigidBody: {fileID: 177501890927259430}
-  stickmanImpulseForce: 10
+  stickmanImpulseForceMuliplier: 10
+  stickmanMaxImpulseForce: 150
   playerController: {fileID: 2131574382388986043}
 --- !u!1 &7113058556880187667
 GameObject:
