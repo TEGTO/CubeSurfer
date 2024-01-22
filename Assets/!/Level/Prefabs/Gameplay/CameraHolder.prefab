@@ -133,6 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shakeVibration: 5
+  toDefaultValuesDuration: 1
 --- !u!1 &8294899625002102107
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,7 +180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraShake: {fileID: 8294899625001189151}
   shakeDuration: 2
-  shakeMagnitude: 0.3
+  shakeMagnitude: 1.5
 --- !u!1 &8294899625642987750
 GameObject:
   m_ObjectHideFlags: 0

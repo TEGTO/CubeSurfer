@@ -25,8 +25,6 @@ namespace GameplayNS.LevelPartManagment
     }
     public class LevelPartSpawner : MonoBehaviour
     {
-        private const int MAX_AMOUNT_OF_ACTIVE_LEVEL_PARTS = 8;
-
         private static LevelPartSpawner instance;
         public static LevelPartSpawner Instance
         {
@@ -41,6 +39,8 @@ namespace GameplayNS.LevelPartManagment
         private float spawnDuration = 5f;
         [SerializeField]
         private int amountLevelsOnStart = 4;
+        [SerializeField]
+        private int maxAmountOfActiveParts = 4;
         [SerializeField]
         private LevelPart[] levelParts;
 
@@ -99,7 +99,7 @@ namespace GameplayNS.LevelPartManagment
         }
         private void AddOldestLevelPartToPool()
         {
-            if (activeLevelParts.Count > MAX_AMOUNT_OF_ACTIVE_LEVEL_PARTS)
+            if (activeLevelParts.Count > maxAmountOfActiveParts)
             {
                 LevelPart levelPartToPool = activeLevelParts.Dequeue();
                 levelPartToPool.InstantiatedPrefab.SetActive(false);

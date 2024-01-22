@@ -27,7 +27,8 @@
             <ui:Label text="105" display-tooltip-when-elided="true" name="Score" class="text" />
         </ui:GroupBox>
     </ui:VisualElement>
-    <ui:VisualElement name="MusicMuteCanvas" style="position: absolute; align-items: flex-end; width: 100%;">
-        <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" name="MuteMusicButton" class="text button-music" />
+    <ui:VisualElement name="ToggleButtonsCanvas" style="position: absolute; align-items: flex-end; width: 100%;">
+        <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" name="MuteMusicButton" class="text toggle-button button-music" />
+        <ui:Button display-tooltip-when-elided="true" enable-rich-text="false" name="VibrationMuteButton" class="text toggle-button button-vibration" />
     </ui:VisualElement>
 </ui:UXML>

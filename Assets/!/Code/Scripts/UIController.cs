@@ -1,6 +1,8 @@
 using GameplayNS;
 using GameplayNS.CubeTowerNS;
+using SettingsNS;
 using SoundNS;
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityMethodsNS;
@@ -12,6 +14,7 @@ namespace UiNS
         private const string HAND_ANIMATION_CLASS = "hand-right";
         private const string NEW_SCORE_ANIMATION_CLASS = "text-new-score-animated";
         private const string MUTE_MUSIC_BUTTON_ANIMATION_CLASS = "button-music-muted";
+        private const string MUTE_VIBRATION_BUTTON_ANIMATION_CLASS = "button-vibration-muted";
 
         [SerializeField]
         private GameManager gameManager;
@@ -25,10 +28,12 @@ namespace UiNS
         private Button tryAgainButton;
         private VisualElement scoreCanvas;
         private Button musicMuteButton;
+        private Button vibrationMuteButton;
         private Label scoreLabel;
         private Label scoreOnLostScreenLabel;
         private Label highestScoreLabel;
         private Label newHighestScoreLabel;
+        private bool isFirstFrame = false;
 
         protected override void OnEnableAfterStart()
         {
@@ -46,6 +51,16 @@ namespace UiNS
             InitializeUIElements();
             ChangeActiveUIScore();
         }
+        private void Update()
+        {
+            if (!isFirstFrame)
+            {
+                //To register any events related to the transition animation, you must wait for a first frame after start
+                isFirstFrame = true;
+                RegisterAnimationToggleClass(handSprite, HAND_ANIMATION_CLASS);
+                RegisterAnimationToggleClass(newHighestScoreLabel, NEW_SCORE_ANIMATION_CLASS);
+            }
+        }
         private void InitializeUIElements()
         {
             var root = uIDocument.rootVisualElement;
@@ -60,14 +75,16 @@ namespace UiNS
             highestScoreLabel = root.Q<Label>("HighestScore");
             newHighestScoreLabel = root.Q<Label>("NewHighestScore");
             musicMuteButton = root.Q<Button>("MuteMusicButton");
+            vibrationMuteButton = root.Q<Button>("VibrationMuteButton");
             RegisterButtonClickSound(tryAgainButton);
             RegisterButtonClickSound(musicMuteButton);
-            RegisterHandSpriteAnimation();
-            RegisterNewHighestScoreAnimation();
+            RegisterButtonClickSound(vibrationMuteButton);
             RegisterStartGameButtonEvents();
-            RegisterTryAgainButtonEvents();
-            RegisterMuteMusicButtonEvents();
-            SetMuteMusicButtonUI();
+            RegisterButtonClickEvent(tryAgainButton, ResetGame);
+            RegisterButtonClickEvent(musicMuteButton, MuteMusicButtonEvent);
+            RegisterButtonClickEvent(vibrationMuteButton, MuteVibrationButtonEvent);
+            SetMuteButtonUI(musicMuteButton, MUTE_MUSIC_BUTTON_ANIMATION_CLASS, Settings.IsMusicMuted.BoolState);
+            SetMuteButtonUI(vibrationMuteButton, MUTE_VIBRATION_BUTTON_ANIMATION_CLASS, Settings.IsVibrationMuted.BoolState);
         }
         private void RegisterButtonClickSound(Button button)
         {
@@ -78,22 +95,14 @@ namespace UiNS
              },
              TrickleDown.TrickleDown);
         }
-        private void RegisterHandSpriteAnimation()
+        private void RegisterAnimationToggleClass(VisualElement visualElement, string toggleNameClass)
         {
-            handSprite.RegisterCallback<TransitionEndEvent>
+            visualElement.RegisterCallback<TransitionEndEvent>
             (
-                evt => handSprite.ToggleInClassList(HAND_ANIMATION_CLASS)
+               evt => visualElement.ToggleInClassList(toggleNameClass)
             );
-            //First invoke delay, the delay is needed for everything to be initialized, 100 ms is enough
-            handSprite.schedule.Execute(() => handSprite.ToggleInClassList(HAND_ANIMATION_CLASS)).StartingIn(100);
-        }
-        private void RegisterNewHighestScoreAnimation()
-        {
-            newHighestScoreLabel.RegisterCallback<TransitionEndEvent>
-            (
-                evt => newHighestScoreLabel.ToggleInClassList(NEW_SCORE_ANIMATION_CLASS)
-            );
-            newHighestScoreLabel.schedule.Execute(() => newHighestScoreLabel.ToggleInClassList(NEW_SCORE_ANIMATION_CLASS)).StartingIn(100);
+            //To apply any changes related to the transition animation, you must wait for a while
+            visualElement.schedule.Execute(() => visualElement.ToggleInClassList(toggleNameClass)).StartingIn(100);
         }
         private void RegisterStartGameButtonEvents()
         {
@@ -104,24 +113,18 @@ namespace UiNS
                 },
                 TrickleDown.TrickleDown);
         }
-        private void RegisterMuteMusicButtonEvents()
+        private void StartGame()
         {
-            musicMuteButton.RegisterCallback<ClickEvent>(
-              e =>
-              {
-                  SoundManager.Instance.ToggleMusicState();
-                  SetMuteMusicButtonUI();
-              },
-              TrickleDown.TrickleDown);
+            gameManager.StartGame();
+            startGameMenuCanvas.visible = false;
+            scoreCanvas.visible = true;
         }
-        private void SetMuteMusicButtonUI() =>
-            musicMuteButton.EnableInClassList(MUTE_MUSIC_BUTTON_ANIMATION_CLASS, SoundManager.Instance.IsMusicMuted);
-        private void RegisterTryAgainButtonEvents()
+        private void RegisterButtonClickEvent(Button button, Action clickEvent)
         {
-            tryAgainButton.RegisterCallback<ClickEvent>(
+            button.RegisterCallback<ClickEvent>(
                e =>
                {
-                   ResetGame();
+                   clickEvent();
                },
                TrickleDown.TrickleDown);
         }
@@ -130,12 +133,18 @@ namespace UiNS
             gameManager.ResetGame();
             EnableLostMenu(false);
         }
-        private void StartGame()
+        private void MuteMusicButtonEvent()
         {
-            gameManager.StartGame();
-            startGameMenuCanvas.visible = false;
-            scoreCanvas.visible = true;
+            Settings.IsMusicMuted.ToggleValue();
+            SetMuteButtonUI(musicMuteButton, MUTE_MUSIC_BUTTON_ANIMATION_CLASS, Settings.IsMusicMuted.BoolState);
         }
+        private void MuteVibrationButtonEvent()
+        {
+            Settings.IsVibrationMuted.ToggleValue();
+            SetMuteButtonUI(vibrationMuteButton, MUTE_VIBRATION_BUTTON_ANIMATION_CLASS, Settings.IsVibrationMuted.BoolState);
+        }
+        private void SetMuteButtonUI(VisualElement visualElement, string className, bool value) =>
+            visualElement.EnableInClassList(className, value);
         private void OnLostGame()
         {
             if (CubeTower.Instance.CheckIfGameLost())
@@ -145,10 +154,8 @@ namespace UiNS
                 scoreCanvas.visible = false;
             }
         }
-        private void EnableLostMenu(bool enable)
-        {
+        private void EnableLostMenu(bool enable) =>
             lostMenuCanvas.visible = enable;
-        }
         private void ScoreOnLostGame()
         {
             bool isCurrentScoreNewRecord = gameManager.CurrentScore > gameManager.HighestScore;
@@ -158,9 +165,7 @@ namespace UiNS
             scoreOnLostScreenLabel.text = "YOUR SCORE: " + currentScore.ToString();
             highestScoreLabel.text = "HIGHEST SCORE: " + highestScore.ToString();
         }
-        private void ChangeActiveUIScore()
-        {
+        private void ChangeActiveUIScore() =>
             scoreLabel.text = gameManager.CurrentScore.ToString();
-        }
     }
 }

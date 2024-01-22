@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6508641361149237420}
+  - component: {fileID: 7266329520361979939}
   - component: {fileID: 3932934865229809340}
   m_Layer: 8
   m_Name: NewLevelPartTrigger
@@ -32,6 +33,22 @@ Transform:
   m_Father: {fileID: 4007231543822553290}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &7266329520361979939
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1956842680559214332}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!65 &3932934865229809340
 BoxCollider:
   m_ObjectHideFlags: 0

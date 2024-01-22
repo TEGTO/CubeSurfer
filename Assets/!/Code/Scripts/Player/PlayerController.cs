@@ -24,27 +24,26 @@ namespace GameplayNS
         [Header("Player"), SerializeField]
         private Axis playerControlledAxis = Axis.X;
         [SerializeField]
-        private float playerInputMoveSpeed = 5f;
+        private float playerLerpSpeed = 5f;
+        [SerializeField]
+        private float playerInputSpeed = 2f;
         [SerializeField]
         private Vector2 maxHorizontalBoundaries;
 
-        private bool playerTouchedScreenInPrevFrame = false;
         private float currentTimeFromGameStart;
         private Vector3 playerInputMovement;
         private Vector3 playerInputMovementDirection;
         private Vector3 characterMovementDirection;
 
-        protected float CurrentChracterSpeed { get { return Mathf.Lerp(startChracterMoveSpeed, maxChracterMoveSpeed, currentTimeFromGameStart / timeToGetMaxSpeed); } }
+        public float CurrentChracterSpeed { get { return Mathf.Lerp(startChracterMoveSpeed, maxChracterMoveSpeed, currentTimeFromGameStart / timeToGetMaxSpeed); } }
 
         private void OnEnable()
         {
             inputManager.OnTouchPerfoming += PlayerMoveInput;
-            inputManager.OnTouchCanceled += PlayerMoveCancel;
         }
         private void OnDisable()
         {
             inputManager.OnTouchPerfoming -= PlayerMoveInput;
-            inputManager.OnTouchCanceled -= PlayerMoveCancel;
         }
         private void Start()
         {
@@ -54,33 +53,36 @@ namespace GameplayNS
         private void Update()
         {
             currentTimeFromGameStart += Time.deltaTime;
-            CombineMoveVectors();
+            CharacterMove();
+            PlayerMove();
+        }
+        private void CharacterMove()
+        {
+            Vector3 characterMovement = characterMovementDirection * CurrentChracterSpeed;
+            transform.Translate(characterMovement * Time.deltaTime, Space.World);
+        }
+        private void PlayerMove()
+        {
+            Vector3 currentPosition = transform.position;
+            Vector3 currentCharacterPosition = MultiplicateVectors(currentPosition, characterMovementDirection);
+            Vector3 combinedVector = currentCharacterPosition + playerInputMovement;
+            transform.position = Vector3.Lerp(transform.position, combinedVector, Time.deltaTime * playerLerpSpeed);
+            transform.position = ClampPosition(transform.position);
         }
         private void PlayerMoveInput(TouchControl touch)
         {
-            float prevTouchHorizontalPosition;
-            prevTouchHorizontalPosition = playerTouchedScreenInPrevFrame
-                ? touch.ReadValueFromPreviousFrame().position.x
-                : touch.position.ReadValue().x;
             float currentTouchHorizontalPosition = touch.position.ReadValue().x;
-            float horizontalDirectionOfPlayerInput;
-            horizontalDirectionOfPlayerInput = currentTouchHorizontalPosition.CompareTo(prevTouchHorizontalPosition);
-            playerInputMovement = playerInputMovementDirection * horizontalDirectionOfPlayerInput * playerInputMoveSpeed;
-            playerTouchedScreenInPrevFrame = true;
+            float touchPositionX = currentTouchHorizontalPosition / Screen.width;
+            Vector2 playerInputSensivity = maxHorizontalBoundaries * playerInputSpeed;
+            float movementAmount = Mathf.Lerp(playerInputSensivity.x, playerInputSensivity.y, touchPositionX);
+            playerInputMovement = playerInputMovementDirection * movementAmount;
         }
-        private void PlayerMoveCancel(TouchControl touch)
+        private Vector3 MultiplicateVectors(Vector3 firstVector, Vector3 secondVector)
         {
-            playerInputMovement = Vector3.zero;
-            playerTouchedScreenInPrevFrame = false;
+            return new Vector3(firstVector.x * secondVector.x, firstVector.y * secondVector.y,
+                firstVector.z * secondVector.z);
         }
-        private void CombineMoveVectors()
-        {
-            Vector3 characterMovement = characterMovementDirection * CurrentChracterSpeed;
-            Vector3 combinedMovement = characterMovement + playerInputMovement;
-            transform.Translate(combinedMovement * Time.deltaTime, Space.World);
-            transform.position = ClampedPlayerInput(transform.position);
-        }
-        private Vector3 ClampedPlayerInput(Vector3 movementPosition)
+        private Vector3 ClampPosition(Vector3 movementPosition)
         {
             float positionX = movementPosition.x, positionY = movementPosition.y, positionZ = movementPosition.z;
             switch (playerControlledAxis)

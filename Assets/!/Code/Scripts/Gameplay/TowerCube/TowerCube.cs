@@ -23,17 +23,17 @@ namespace GameplayNS.CubeTowerNS
         {
             cubeInTower = false;
             transform.parent = null;
-            rigidbody.isKinematic = false;
+            //rigidbody.isKinematic = false;
             rigidbody.constraints &= ~RigidbodyConstraints.FreezePosition;
         }
         public void EnableInTowerCubePhysics()
         {
-            rigidbody.isKinematic = false;
+            //rigidbody.isKinematic = false;
             rigidbody.constraints &= ~RigidbodyConstraints.FreezePositionY;
         }
         public void DisableCubePhysics()
         {
-            rigidbody.isKinematic = true;
+            //rigidbody.isKinematic = true;
             rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         }
         public void SetCubeTransformInTower(Transform originTransform, float currentCubeTowerHeight)

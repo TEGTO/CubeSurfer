@@ -76,7 +76,7 @@ namespace GameplayNS
             stickmanMainBody.SetActive(false);
             stickmanRagdoll.SetActive(true);
             stickmanRagdoll.transform.DOMoveY(stickmanMainBody.transform.position.y, 0);
-            stickmanRagdollMainRigidBody.AddForce(stickmanRagdoll.transform.forward * stickmanImpulseForce, ForceMode.Impulse);
+            stickmanRagdollMainRigidBody.AddForce(stickmanRagdoll.transform.forward * stickmanImpulseForce * playerController.CurrentChracterSpeed, ForceMode.Impulse);
         }
     }
 }

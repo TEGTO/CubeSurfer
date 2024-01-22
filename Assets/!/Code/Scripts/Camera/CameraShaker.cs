@@ -6,19 +6,21 @@ namespace CameraNS
     {
         [SerializeField]
         private int shakeVibration = 5;
+        [SerializeField]
+        private float toDefaultValuesDuration = 1f;
 
-        private Vector3 startLocalPosition;
         private Quaternion startLocalRotation;
+        private Tweener currentTween;
 
         private void Start()
         {
-            startLocalPosition = transform.localPosition;
             startLocalRotation = transform.localRotation;
         }
         public void ShakeCamera(float duration, float magnitude)
         {
-            transform.DOShakePosition(duration, magnitude, shakeVibration).OnComplete(() => transform.localPosition = startLocalPosition);
-            transform.DOShakeRotation(duration, magnitude, shakeVibration).OnComplete(() => transform.localRotation = startLocalRotation);
+            if (currentTween.IsActive())
+                currentTween.Kill();
+            currentTween = transform.DOShakeRotation(duration, magnitude, shakeVibration).OnComplete(() => transform.DOLocalRotate(startLocalRotation.eulerAngles, toDefaultValuesDuration));
         }
     }
 }

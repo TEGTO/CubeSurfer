@@ -1,5 +1,5 @@
 .hand {
-    background-image: url('project://database/Assets/!/Art/Textures/handSprite.png?fileID=21300000&guid=da4e7ddac90a1a34e87f56f8e87f02f9&type=3#handSprite');
+    background-image: url('project://database/Assets/!/Art/Textures/HandSprite.png?fileID=21300000&guid=da4e7ddac90a1a34e87f56f8e87f02f9&type=3#HandSprite');
     translate: -150px -10%;
     width: 100px;
     height: 100px;
@@ -91,8 +91,7 @@
     scale: 1.2 1.2;
 }
 
-.button-music {
-    background-image: url('project://database/Assets/!/Art/Textures/music-icon.png?fileID=21300000&guid=01c171f7539ce4244a6f69e986e82e43&type=3#music-icon');
+.toggle-button {
     width: 50px;
     height: 50px;
     top: 50px;
@@ -113,8 +112,22 @@
     background-color: rgba(0, 0, 0, 0);
 }
 
+.button-music {
+    background-image: url('project://database/Assets/!/Art/Textures/MusicIco.png?fileID=21300000&guid=01c171f7539ce4244a6f69e986e82e43&type=3#MusicIco');
+}
+
 .button-music-muted {
-    background-image: url('project://database/Assets/!/Art/Textures/music-off-icon.png?fileID=21300000&guid=f2e79fd2d203bc44d8713aa1dd24db7c&type=3#music-off-icon');
+    background-image: url('project://database/Assets/!/Art/Textures/MusicIco_Off.png?fileID=21300000&guid=f2e79fd2d203bc44d8713aa1dd24db7c&type=3#MusicIco_Off');
     width: 62px;
     right: 38px;
+}
+
+.button-vibration {
+    background-image: url('project://database/Assets/!/Art/Textures/VibrateIco.png?fileID=21300000&guid=db36222d33d82184fab03e6bc668db17&type=3#VibrateIco');
+    scale: 1.2 1.2;
+    top: 60px;
+}
+
+.button-vibration-muted {
+    background-image: url('project://database/Assets/!/Art/Textures/VibrateIco_Off.png?fileID=21300000&guid=076fb9a2e450f6545b0a847eaf5e2c7f&type=3#VibrateIco_Off');
 }

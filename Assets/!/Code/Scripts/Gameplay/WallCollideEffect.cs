@@ -3,6 +3,7 @@ using GameplayNS.CubeTowerNS;
 using UnityEngine;
 using UnityMethodsNS;
 
+
 namespace GameplayNS
 {
     public class WallCollideEffect : OnEnableMethodAfterStart
@@ -22,7 +23,8 @@ namespace GameplayNS
         {
             cameraShake.ShakeCamera(shakeDuration, shakeMagnitude);
 #if !UNITY_EDITOR
-            Handheld.Vibrate();
+             if(!SettingsNS.Settings.IsVibrationMuted.BoolState)
+                Handheld.Vibrate();
 #endif
         }
     }
