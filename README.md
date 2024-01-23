@@ -1,4 +1,4 @@
-## [Main Theme (Song)](https://drive.google.com/drive/u/1/folders/1dcZOh24feg7meD4tacmxHs6bh3rjpTwJ) | [APK](https://drive.google.com/drive/u/1/folders/1dcZOh24feg7meD4tacmxHs6bh3rjpTwJ) | [Gameplay showcase]()
+## [Main Theme (Song)](https://drive.google.com/drive/u/1/folders/1dcZOh24feg7meD4tacmxHs6bh3rjpTwJ) | [APK](https://drive.google.com/drive/u/1/folders/1dcZOh24feg7meD4tacmxHs6bh3rjpTwJ) | [Gameplay showcase](https://youtu.be/4i2m-B7rjeU)
 
 #### :skull: I've always wanted to make something simple, but something that I haven't made before.
 
